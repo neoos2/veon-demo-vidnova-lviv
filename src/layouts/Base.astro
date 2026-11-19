@@ -1,0 +1,41 @@
+---
+import "../styles/tokens.css";
+import "../styles/fonts.css";
+import "../styles/global.css";
+import notoUrl from "../assets/fonts/noto-serif-display-400-500.woff2?url";
+
+interface Props { lang: string; title: string; description: string; canonical?: string; }
+const { lang, title, description, canonical } = Astro.props;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add("js")</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={notoUrl} as="font" type="font/woff2" crossorigin />
+    <slot name="head" />
+    <style is:global>
+      /* Floor 4, repeated here because the layout is checked on its own (global.css sets the same). */
+      html, body { overflow-x: clip; }
+    </style>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">{lang.startsWith("uk") ? "До змісту" : lang.startsWith("ru") ? "К содержанию" : "Skip to content"}</a>
+    <slot name="header" />
+    <main id="main"><slot /></main>
+    <slot name="footer" />
+    <script src="../scripts/reveal.ts"></script>
+    <script src="../scripts/ui.ts"></script>
+  </body>
+</html>

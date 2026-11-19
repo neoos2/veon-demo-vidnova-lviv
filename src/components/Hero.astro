@@ -1,0 +1,117 @@
+---
+import { getImage } from "astro:assets";
+import Section from "./Section.astro";
+import wide from "../assets/photos/hero-wide.jpg";
+import tall from "../assets/photos/hero-tall.jpg";
+import { clinic, channels } from "../data/clinic";
+
+// Art direction: tall 4:5 frame on phones, wide frame from 768 px. AVIF + WebP, 3+ sizes each.
+const fmts = ["avif", "webp"] as const;
+async function srcset(src: ImageMetadata, widths: number[], format: (typeof fmts)[number]) {
+  const out = await Promise.all(widths.map((w) => getImage({ src, width: w, format, quality: 70 })));
+  return out.map((r, i) => `${r.src} ${widths[i]}w`).join(", ");
+}
+const tallW = [390, 600, 860, 1200];
+const wideW = [700, 1000, 1400, 1707];
+const sources = [];
+for (const f of fmts) {
+  sources.push({ media: "(max-width: 767px)", type: `image/${f}`, srcset: await srcset(tall, tallW, f), sizes: "100vw" });
+  sources.push({ media: "(min-width: 768px)", type: `image/${f}`, srcset: await srcset(wide, wideW, f), sizes: "(min-width: 1440px) 1050px, 72vw" });
+}
+const fallback = await getImage({ src: wide, width: 1400, format: "jpg", quality: 75 });
+---
+<Section id="hero" rec="UX-R002,SE-R006" class="hero">
+  <div class="fp-grid">
+    <h1 class="fp-title" data-rec="SE-R006,GA-R008">
+      <span class="fp-title__a">Vidnova Clinic у Львові —</span>
+      <span class="fp-title__b">пластична хірургія, стоматологія, косметологія і гінекологія</span>
+    </h1>
+    <div class="fp-action">
+      <a class="btn btn--primary fp-book" href="#contacts" data-book aria-haspopup="dialog" data-rec="UX-R002,MA-R006,GA-R008">Записатися на консультацію</a>
+      <a class="fp-phone tnum" href={channels.phone.href} data-rec="UX-R001,SE-R004,MA-R005,GA-R007">{channels.phone.label}</a>
+      <p class="fp-place">
+        <span>{clinic.addressShort}, {clinic.city}</span>
+        <span class="tnum">{clinic.hoursShort}</span>
+      </p>
+      <ul class="fp-proof">
+        <li><a class="fp-proof__link" href="#one-day">Консультація + обстеження + операція = 1 день</a></li>
+        <li><a class="fp-proof__link" href="#doctors">Хірурги Vidnova у ТОП-50 пластичних хірургів України</a></li>
+      </ul>
+    </div>
+    <figure class="fp-photo">
+      <picture>
+        {sources.map((s) => <source media={s.media} type={s.type} srcset={s.srcset} sizes={s.sizes} />)}
+        <img src={fallback.src} width="1707" height="1138" alt="Пластична хірургія: лікарка Vidnova розмічає обличчя пацієнтки перед процедурою" fetchpriority="high" loading="eager" decoding="sync" />
+      </picture>
+    </figure>
+  </div>
+</Section>
+
+<style>
+  .hero { padding-block: var(--s-4) 0; }
+  .fp-grid {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(var(--pad), 1fr)
+      [content-start] repeat(12, minmax(0, calc(min(100% - 2 * var(--pad), var(--container)) / 12)))
+      [content-end] minmax(var(--pad), 1fr) [full-end];
+    row-gap: var(--s-4);
+  }
+  .fp-title { grid-column: content-start / content-end; }
+  .fp-title__a { display: block; font-size: var(--fs-display); font-weight: 400; letter-spacing: -0.01em; }
+  .fp-title__b {
+    display: block; margin-top: 0.4em; max-width: 28em;
+    font-size: var(--fs-display-2); line-height: 1.18; font-weight: 400; color: var(--color-text);
+  }
+  .fp-action { grid-column: content-start / content-end; display: grid; gap: var(--s-2); align-content: start; }
+  .fp-book { width: 100%; white-space: nowrap; padding-inline: var(--s-2); }
+  @media (max-width: 359px) { .fp-book { font-size: 0.9375rem; padding-inline: 12px; } }
+  .fp-phone {
+    justify-self: start; display: inline-flex; align-items: center; min-height: var(--tap);
+    font-size: var(--fs-md); font-weight: 600; color: var(--color-text);
+    text-decoration: underline; text-decoration-color: var(--color-line); text-decoration-thickness: 1px; text-underline-offset: 0.25em;
+  }
+  .fp-phone:hover { color: var(--color-accent); text-decoration-color: currentColor; }
+  .fp-place { display: grid; color: var(--color-muted); font-size: var(--fs-body); }
+  .fp-proof { display: none; }
+  .fp-photo { grid-column: full-start / full-end; overflow: hidden; }
+  .fp-photo img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+
+  @media (min-width: 768px) {
+    .hero { padding-top: var(--s-6); }
+    .fp-grid { row-gap: var(--s-6); }
+    .fp-action { grid-column: 2 / 7; padding-right: var(--gap); }
+    .fp-photo { grid-column: 7 / full-end; }
+    .fp-photo img { aspect-ratio: 3 / 2; max-height: clamp(420px, 100svh - 23.5rem, 640px); object-position: 30% 35%; }
+  }
+  @media (min-width: 1024px) {
+    .fp-action { grid-column: 2 / 6; }
+    .fp-photo { grid-column: 6 / full-end; margin-left: var(--gap); }
+    .fp-book { width: auto; justify-self: stretch; }
+    /* Real proof anchors at the foot of the action column, level with the bottom of the photo (B-F025, B-F027). */
+    .fp-action { display: flex; flex-direction: column; align-items: stretch; }
+    .fp-action > .fp-phone { align-self: flex-start; }
+    .fp-proof { display: grid; margin-top: auto; padding-top: var(--s-4); border-top: 1px solid var(--color-border); }
+    .fp-proof li + li { border-top: 1px solid var(--color-border); }
+    .fp-proof__link {
+      display: block; padding-block: var(--s-2); font-family: var(--font-display); font-size: var(--fs-md); line-height: 1.25;
+      text-decoration: underline; text-decoration-color: var(--color-border); text-decoration-thickness: 1px; text-underline-offset: 0.25em;
+      transition: color var(--dur-fast) var(--ease-out), text-decoration-color var(--dur-fast) var(--ease-out);
+    }
+    .fp-proof__link:hover { color: var(--color-accent); text-decoration-color: currentColor; }
+    .fp-proof li:first-child .fp-proof__link { padding-top: 0; }
+  }
+
+  /* Motion #1 — frame opens; text is never hidden, the photo is painted from the first frame. */
+  @media (prefers-reduced-motion: no-preference) {
+    .fp-photo { animation: frame-open 900ms var(--ease-out) both; }
+    .fp-photo img { animation: frame-settle 900ms var(--ease-out) both; }
+    @media (max-width: 767px) {
+      .fp-photo { animation: frame-fade 500ms var(--ease-out) both; }
+      .fp-photo img { animation: none; }
+    }
+  }
+  @keyframes frame-open { from { clip-path: inset(0 0 8% 0); } to { clip-path: inset(0); } }
+  @keyframes frame-settle { from { transform: scale(1.04); } to { transform: none; } }
+  @keyframes frame-fade { from { opacity: 0.85; } to { opacity: 1; } }
+</style>

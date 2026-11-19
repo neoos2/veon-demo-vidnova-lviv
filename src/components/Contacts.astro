@@ -1,0 +1,74 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { clinic, channels, socials } from "../data/clinic";
+---
+<Section id="contacts" class="section contacts">
+  <div class="container ct-grid">
+    <div class="ct-place">
+      <h2 class="h2">Вул. Куровця, 10 — запис на консультацію</h2>
+      <address class="ct-address">
+        <p class="ct-street">{clinic.address}, {clinic.city}</p>
+        <p class="ct-hours tnum">{clinic.hoursLong}<br />{clinic.dayOff}</p>
+      </address>
+      <a class="tlink ct-map" href={clinic.mapUrl} target="_blank" rel="noopener"><Icon name="pin" />Відкрити на карті</a>
+    </div>
+    <div class="ct-channels">
+      <ul class="ct-list">
+        <li>
+          <a class="ct-channel" href={channels.phone.href} data-rec="UX-R001,SE-R004,MA-R005,GA-R007">
+            <span class="ct-label">Зателефонувати</span><span class="ct-value tnum">{channels.phone.label}</span>
+          </a>
+        </li>
+        <li>
+          <a class="ct-channel" href={channels.viber.href}>
+            <span class="ct-label">Написати у Viber</span><span class="ct-value tnum">{channels.viber.label}</span>
+          </a>
+        </li>
+        <li>
+          <a class="ct-channel" href={channels.telegram.href} target="_blank" rel="noopener">
+            <span class="ct-label">Telegram-бот</span><span class="ct-value">{channels.telegram.label}</span>
+          </a>
+        </li>
+      </ul>
+      <p class="ct-mail">E-mail: <a class="tlink" href={`mailto:${clinic.email}`}>{clinic.email}</a></p>
+      <div class="ct-social" data-rec="S-R013">
+        <p class="ct-social__title">Vidnova у соцмережах</p>
+        <ul>
+          {socials.map((s) => <li><a class="tlink" href={s.href} target="_blank" rel="noopener">{s.name}</a></li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .ct-grid { display: grid; gap: var(--s-8); }
+  .ct-place { display: grid; gap: var(--s-4); align-content: start; }
+  .ct-address { font-style: normal; display: grid; gap: var(--s-2); }
+  .ct-street { font-family: var(--font-display); font-size: var(--fs-h3); line-height: 1.15; }
+  .ct-hours { color: var(--color-muted); font-size: var(--fs-md); }
+  .ct-map { display: inline-flex; align-items: center; gap: var(--s-1); min-height: var(--tap); justify-self: start; font-weight: 500; }
+  .ct-map :global(svg) { width: 20px; height: 20px; color: var(--color-accent); }
+  .ct-list { border-top: 1px solid var(--color-text); }
+  .ct-channel {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--s-1) var(--s-3);
+    padding: var(--s-3) var(--s-1); border-bottom: 1px solid var(--color-border); text-decoration: none;
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .ct-channel:hover { background: var(--color-surface); }
+  .ct-channel:hover .ct-label { color: var(--color-accent); }
+  @media (max-width: 767px) { .ct-channel { flex-direction: column; align-items: flex-start; } }
+  .ct-label { font-family: var(--font-display); font-size: var(--fs-lead); line-height: 1.2; }
+  .ct-value { color: var(--color-muted); font-weight: 500; }
+  .ct-mail { margin-top: var(--s-4); color: var(--color-muted); }
+  .ct-mail a { color: var(--color-text); }
+  .ct-social { margin-top: var(--s-3); display: grid; gap: var(--s-1); color: var(--color-muted); }
+  .ct-social ul { display: flex; gap: var(--s-4); }
+  .ct-social a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--color-text); font-weight: 500; }
+  @media (min-width: 1024px) {
+    .ct-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+    .ct-place { grid-column: 1 / 7; }
+    .ct-channels { grid-column: 7 / 13; padding-top: var(--s-2); }
+  }
+</style>

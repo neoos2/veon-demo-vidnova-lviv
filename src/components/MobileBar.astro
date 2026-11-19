@@ -1,0 +1,24 @@
+---
+// Phone only: booking bar after the first screen, replaces the old floating «КНОПКА ЗВ'ЯЗКУ» (UX-I003).
+import { channels } from "../data/clinic";
+---
+<div class="mbar" data-mbar data-rec="UX-R003,UX-R002,MA-R006">
+  <a class="btn btn--primary mbar__book" href="#contacts" data-book aria-haspopup="dialog">Записатися</a>
+  <a class="btn btn--secondary mbar__viber" href={channels.viber.href}>Viber</a>
+</div>
+
+<style>
+  .mbar { display: none; }
+  @media (max-width: 767px) {
+    :global(:root) { --bar-h: calc(68px + env(safe-area-inset-bottom)); }
+    .mbar {
+      position: fixed; z-index: 40; inset: auto 0 0 0; display: grid; grid-template-columns: 1fr auto; gap: var(--s-1);
+      padding: 8px var(--pad) calc(8px + env(safe-area-inset-bottom));
+      background: var(--color-bg); border-top: 1px solid var(--color-border);
+      transition: transform 240ms var(--ease-out);
+    }
+    :global(.js) .mbar:not(.is-shown) { transform: translateY(110%); }
+    .mbar .btn { min-height: 52px; }
+    .mbar__viber { padding-inline: var(--s-3); }
+  }
+</style>

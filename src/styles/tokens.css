@@ -1,0 +1,69 @@
+/* Hallmark · shape: editorial-index · genre: editorial · theme: custom · job: book · idea: "Клініка, показана людьми за роботою: великі реальні кадри лікарів і приміщень, напрями як зміст номера, антиква в заголовках, фіолетовий лише там, де пацієнт робить крок до запису" · vibe: "clinical calm, people at work, magazine spread"
+ * paper: #FFFFFF · surface: absolute · accent: #4D2973 · display: Noto Serif Display · body: Fixel Text · hero: full-width serif H1 in two sizes, action column on the left (book button, open phone number, address, hours), the clinic's own photo of a doctor marking a patient's face bleeding off the right edge · nav: sticky white bar, logo + compact city/lang, 6 anchors, open phone, book button; mobile full-screen menu + bottom booking bar · footer: graphite, white logo, license, future pages, other cities, year · imagery: client photos · signature: directions index where hovering a direction swaps in the real room of that direction; the violet page with the formula «= 1 день»
+ * axes: white/serif-display/violet · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: E (equipment is text-heavy), answered with two real product cut-outs and a typographic spec instead of logo tiles */
+/* Hallmark · waive 7b · --color-bg/--color-accent-ink/--color-on-dark #FFFFFF · approved concept.md picks pure white from the clinic's own photos (white walls, white jacket); priority 2 (approved concept) over Hallmark */
+/* Hallmark · waive 39b · button.dir-toggle 82–99px · the toggle is the H3 of a directions index row (heading-size text at 40–56px), not a marketing control; its hit area grows with the heading */
+/* Hallmark · waive 49b · a.fp-proof__link wraps to 2 lines · these are sentence-length proof links set in the display face at the foot of the hero column (B-F025, B-F027), read as text, not button labels */
+/* Line 1 of this file is the Hallmark stamp (docs/process/hallmark.md); values come from design/concept.md (veon-concept). */
+:root {
+  /* Colour — concept.md «Дизайн-система для FULL» */
+  --color-bg: #FFFFFF;
+  --color-surface: #F3F2F5;
+  --color-text: #222025;
+  --color-muted: #5D5964;
+  --color-accent: #4D2973;
+  --color-accent-hover: #3F2160;
+  --color-accent-ink: #FFFFFF;
+  --color-accent-on-dark: #CBB6E6;
+  --color-dark: #222025;
+  --color-on-dark: #FFFFFF;
+  --color-on-dark-muted: #CBB6E6;
+  --color-border: #D9D5DF;
+  --color-line: #8C8594;
+  --color-shade: rgb(34 32 37 / 0.42);
+
+  /* Type */
+  --font-display: "Noto Serif Display", "Noto Serif Display Fallback", Georgia, serif;
+  --font-body: "Fixel Text", "Fixel Text Fallback", system-ui, sans-serif;
+  --fs-display: clamp(2.75rem, 1.6rem + 4.4vw, 5.5rem);     /* 44 → 88 */
+  --fs-display-2: clamp(1.375rem, 1.05rem + 1.45vw, 2.5rem); /* 22 → 40 */
+  --fs-h2: clamp(2.25rem, 1.85rem + 1.55vw, 3.5rem);         /* 36 → 56 */
+  --fs-h3: clamp(1.75rem, 1.5rem + 0.95vw, 2.5rem);          /* 28 → 40 */
+  --fs-lead: clamp(1.375rem, 1.24rem + 0.55vw, 1.75rem);     /* 22 → 28 */
+  --fs-md: clamp(1.125rem, 1.08rem + 0.2vw, 1.25rem);        /* 18 → 20 */
+  --fs-body: clamp(1rem, 0.98rem + 0.1vw, 1.0625rem);        /* 16 → 17 */
+  --fs-sm: 0.875rem;                                         /* 14 */
+  --lh-display: 1.06;
+  --lh-text: 1.55;
+
+  /* Space (multiples of 8) */
+  --s-1: 0.5rem;
+  --s-2: 1rem;
+  --s-3: 1.5rem;
+  --s-4: 2rem;
+  --s-6: 3rem;
+  --s-8: 4rem;
+  --s-12: 6rem;
+  --s-18: 9rem;
+  --section-y: clamp(6rem, 4.2rem + 7.5vw, 9rem); /* 96 → 144 */
+
+  /* Layout */
+  --container: 1280px;
+  --pad: clamp(1.25rem, 0.7rem + 2.4vw, 3rem); /* 20 → 48 */
+  --gap: clamp(1rem, 0.8rem + 0.9vw, 1.5rem);  /* 16 → 24 */
+  --space: var(--pad);
+  --header-h: 60px;
+  --bar-h: 0px;
+  --radius: 2px;
+  --btn-h: 52px;
+  --tap: 44px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 600ms;
+  --dur-fast: 200ms;
+}
+@media (min-width: 1024px) {
+  :root { --header-h: 72px; }
+}

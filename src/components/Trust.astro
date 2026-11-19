@@ -1,0 +1,58 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { Image } from "astro:assets";
+import award from "../assets/photos/award.png";
+import { clinic, clinicNumbers, FUTURE_NOTE } from "../data/clinic";
+---
+<Section id="trust" rec="UX-R008" class="section trust">
+  <div class="container tr-grid">
+    <h2 class="h2 tr-title">Ліцензія і нагорода TOP UKRAINIAN AWARD 2023</h2>
+    <div class="tr-license">
+      <p class="tr-label">Ліцензія, серія</p>
+      <p class="tr-number">{clinic.license}</p>
+    </div>
+    <figure class="tr-award">
+      <Image src={award} alt="Медаль TOP UKRAINIAN AWARD 2023" width={180} height={180} widths={[180, 360]} sizes="180px" format="webp" loading="lazy" />
+      <figcaption>
+        <span>TOP UKRAINIAN AWARD 2023, рейтинг кращих товарів та послуг України за версією аналітичного центру «Вибір Країни»</span>
+        <FutureLink note={FUTURE_NOTE}>Про клініку</FutureLink>
+      </figcaption>
+    </figure>
+    <div class="tr-numbers">
+      <h3 class="tr-sub">Vidnova у цифрах</h3>
+      <dl>
+        {clinicNumbers.map((n) => (
+          <div class="tr-num"><dt>{n.label}</dt><dd class="tnum">{n.value}</dd></div>
+        ))}
+      </dl>
+      <p class="tr-note">дані клініки</p>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .trust { background: var(--color-surface); }
+  .tr-grid { display: grid; gap: var(--s-6); }
+  .tr-license { display: grid; gap: var(--s-1); padding: var(--s-4) 0; border-block: 1px solid var(--color-text); }
+  .tr-label { color: var(--color-muted); }
+  .tr-number { font-family: var(--font-display); font-size: var(--fs-display); line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .tr-award { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: var(--s-3); align-items: center; }
+  .tr-award :global(img) { width: 120px; height: 120px; }
+  .tr-award figcaption { display: grid; justify-items: start; gap: var(--s-1); font-size: var(--fs-sm); color: var(--color-muted); max-width: 24rem; }
+  .tr-sub { font-family: var(--font-body); font-size: var(--fs-body); font-weight: 600; }
+  .tr-numbers dl { margin-top: var(--s-2); border-top: 1px solid var(--color-border); }
+  .tr-num { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-2); padding-block: var(--s-1); border-bottom: 1px solid var(--color-border); }
+  .tr-num dt { color: var(--color-muted); }
+  .tr-num dd { font-weight: 600; font-size: var(--fs-md); }
+  .tr-note { margin-top: var(--s-1); font-size: var(--fs-sm); color: var(--color-muted); }
+  @media (max-width: 380px) { .tr-number { font-size: 2.25rem; } }
+  @media (min-width: 1024px) {
+    .tr-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--s-6); align-items: start; }
+    .tr-title { grid-column: 1 / 9; }
+    .tr-license { grid-column: 1 / 7; }
+    .tr-award { grid-column: 1 / 7; grid-template-columns: 180px minmax(0, 1fr); }
+    .tr-award :global(img) { width: 180px; height: 180px; }
+    .tr-numbers { grid-column: 9 / 13; grid-row: 2 / 4; align-self: start; }
+  }
+</style>

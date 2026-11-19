@@ -1,0 +1,59 @@
+---
+import Logo from "./Logo.astro";
+import FutureLink from "./FutureLink.astro";
+import { clinic, channels, navItems, otherCities, FUTURE_NOTE } from "../data/clinic";
+const pages = ["Ціни", "Фото до і після", "Акції", "Статті"];
+const year = new Date().getFullYear();
+---
+<footer class="site-footer on-dark">
+  <div class="container ft-grid">
+    <div class="ft-brand">
+      <a class="ft-logo" href="#top" aria-label="Vidnova Clinic — на початок сторінки"><Logo title="Vidnova Clinic" /></a>
+      <p class="ft-address">{clinic.address}, {clinic.city}<br /><a class="tlink tnum" href={channels.phone.href}>{channels.phone.label}</a></p>
+    </div>
+    <nav class="ft-col" aria-label="Розділи сторінки (футер)">
+      <p class="ft-title">На сторінці</p>
+      <ul>{navItems.map((n) => <li><a class="tlink" href={n.href}>{n.label}</a></li>)}</ul>
+    </nav>
+    <div class="ft-col">
+      <p class="ft-title">Розділи сайту</p>
+      <ul>{pages.map((p) => <li><FutureLink note={FUTURE_NOTE}>{p}</FutureLink></li>)}</ul>
+    </div>
+    <div class="ft-col">
+      <p class="ft-title">Vidnova в інших містах</p>
+      <ul>{otherCities.map((c) => <li><FutureLink note={FUTURE_NOTE}>{c}</FutureLink></li>)}</ul>
+    </div>
+  </div>
+  <div class="container ft-bottom">
+    <p data-rec="UX-R008">Ліцензія серія {clinic.license}</p>
+    <p>© {year} Vidnova Clinic</p>
+    <FutureLink note={FUTURE_NOTE}>Політика конфіденційності</FutureLink>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--color-dark); color: var(--color-on-dark); padding-block: var(--s-12) var(--s-4); }
+  .ft-grid { display: grid; gap: var(--s-6); }
+  .ft-logo { display: inline-flex; color: var(--color-on-dark); }
+  .ft-logo :global(svg) { width: 160px; height: auto; }
+  .ft-address { margin-top: var(--s-3); color: var(--color-on-dark-muted); }
+  .ft-address a { color: var(--color-on-dark); display: inline-flex; min-height: var(--tap); align-items: center; }
+  .ft-title { font-weight: 600; margin-bottom: var(--s-1); }
+  .ft-col ul { display: grid; }
+  .ft-col a { white-space: nowrap; display: inline-flex; align-items: center; min-height: var(--tap); }
+  .ft-bottom {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-4);
+    margin-top: var(--s-8); padding-top: var(--s-3); border-top: 1px solid var(--color-muted);
+    font-size: var(--fs-sm); color: var(--color-on-dark-muted);
+  }
+  @media (min-width: 768px) {
+    .ft-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .ft-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+    .ft-brand { grid-column: 1 / 5; }
+    .ft-grid > :nth-child(3) { grid-column: 8 / 10; }
+    .ft-grid > :nth-child(4) { grid-column: 10 / 13; }
+    .ft-grid > :nth-child(2) { grid-column: 6 / 8; }
+  }
+</style>

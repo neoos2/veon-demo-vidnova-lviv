@@ -1,0 +1,62 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { channels, oneDayFacts } from "../data/clinic";
+const parts = ["Консультація", "+ обстеження", "+ операція"];
+---
+<Section id="one-day" rec="UX-R011" class="section one-day on-accent">
+  <div class="container od-grid">
+    <h2 class="od-formula">
+      {parts.map((p, i) => <span class="od-part" data-reveal style={`--reveal-delay:${i * 120}ms`}>{p}</span>)}
+      <span class="od-part od-total" data-reveal style="--reveal-delay:360ms">= 1 день</span>
+    </h2>
+    <div class="od-side">
+      <h3 class="od-sub">Ми забезпечуємо</h3>
+      <ul class="od-facts">
+        {oneDayFacts.map((f) => <li>{f}</li>)}
+      </ul>
+      <div class="od-cta">
+        <p>Живете не у Львові? Почніть з повідомлення: надішліть фото й запитання у месенджер.</p>
+        <div class="od-actions">
+          <a class="btn btn--ghost-light" href={channels.viber.href}><Icon name="chat" />Надіслати фото у Viber</a>
+          <a class="btn btn--ghost-light" href={channels.telegram.href} target="_blank" rel="noopener"><Icon name="send" />Надіслати фото в Telegram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .one-day { background: var(--color-accent); color: var(--color-accent-ink); }
+  .one-day :global(:focus-visible) { outline-color: var(--color-accent-on-dark); }
+  .od-grid { display: grid; gap: var(--s-8); }
+  .od-formula { font-size: var(--fs-h2); line-height: 1.08; }
+  .od-part { display: block; }
+  .od-total { margin-top: 0.2em; font-size: calc(var(--fs-display) * 1.25); line-height: 1; }
+  .od-side { display: grid; gap: var(--s-4); align-content: start; }
+  .od-sub { font-family: var(--font-body); font-size: var(--fs-md); font-weight: 600; }
+  .od-facts { border-top: 1px solid var(--color-accent-on-dark); }
+  .od-facts li {
+    padding-block: var(--s-2); border-bottom: 1px solid var(--color-accent-on-dark);
+    font-family: var(--font-display); font-size: var(--fs-lead); line-height: 1.2;
+  }
+  .od-cta { display: grid; gap: var(--s-3); }
+  .od-cta p { color: var(--color-accent-on-dark); max-width: 34rem; }
+  .od-actions { display: grid; gap: var(--s-2); }
+  .od-actions .btn { justify-content: flex-start; white-space: nowrap; padding-inline: var(--s-2); }
+  @media (max-width: 359px) { .od-actions .btn { font-size: 0.9375rem; } }
+  @media (min-width: 768px) {
+    .od-actions { grid-template-columns: repeat(2, max-content); }
+  }
+  @media (min-width: 1024px) {
+    .od-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
+    .one-day { padding-block: var(--s-12); }
+    .od-grid { align-items: center; }
+    .od-formula { grid-column: 1 / 8; }
+    .od-side { grid-column: 8 / 13; }
+    .od-actions { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (min-width: 1280px) {
+    .od-formula { font-size: 4rem; }
+  }
+</style>

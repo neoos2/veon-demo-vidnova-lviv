@@ -1,0 +1,20 @@
+{
+  "name": "veon-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "postbuild": "node scripts/relative-paths.mjs && node scripts/veon-event.mjs demo_build",
+    "images": "node scripts/prepare-images.mjs",
+    "test:e2e": "node tests/smoke.mjs http://localhost:4322/"
+  },
+  "engines": {
+    "node": ">=18.20.8"
+  },
+  "devDependencies": {
+    "astro": "5.14.1"
+  }
+}

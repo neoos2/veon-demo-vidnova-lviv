@@ -1,0 +1,76 @@
+---
+// Channel picker for every «Записатися» trigger ([data-book]). Without JS the triggers lead to #contacts.
+import Icon from "./Icon.astro";
+import { channels } from "../data/clinic";
+---
+<dialog class="book" id="book-dialog" aria-labelledby="book-title" data-book-dialog data-rec="UX-R002,MA-R006,GA-R008">
+  <div class="book__head">
+    <p class="book__title" id="book-title">Записатися на консультацію</p>
+    <button class="book__close" type="button" data-book-close>
+      <Icon name="close" /><span class="visually-hidden">Закрити</span>
+    </button>
+  </div>
+  <p class="book__note">Оберіть зручний спосіб зв’язку.</p>
+  <ul class="book__list">
+    <li>
+      <a class="book__item" href={channels.phone.href} data-rec="UX-R001,SE-R004,MA-R005,GA-R007">
+        <Icon name="phone" /><span class="book__label">Зателефонувати</span><span class="book__value tnum">{channels.phone.label}</span>
+      </a>
+    </li>
+    <li>
+      <a class="book__item" href={channels.viber.href}>
+        <Icon name="chat" /><span class="book__label">Написати у Viber</span><span class="book__value tnum">{channels.viber.label}</span>
+      </a>
+    </li>
+    <li>
+      <a class="book__item" href={channels.telegram.href} target="_blank" rel="noopener">
+        <Icon name="send" /><span class="book__label">Telegram-бот</span><span class="book__value">{channels.telegram.label}</span>
+      </a>
+    </li>
+  </ul>
+</dialog>
+
+<style>
+  .book {
+    width: min(100% - 2 * var(--pad), 26rem); max-width: none; padding: var(--s-3);
+    border: 1px solid var(--color-border); border-radius: var(--radius);
+    background: var(--color-bg); color: var(--color-text);
+  }
+  .book::backdrop { background: var(--color-shade); }
+  .book[open] { animation: book-in 200ms var(--ease-out); }
+  @keyframes book-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .book__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); }
+  .book__title { font-family: var(--font-display); font-size: var(--fs-lead); line-height: 1.15; }
+  .book__close {
+    display: grid; place-items: center; width: var(--tap); height: var(--tap); flex: none;
+    border: 0; background: transparent; color: var(--color-text); cursor: pointer; border-radius: var(--radius);
+  }
+  .book__close:hover { background: var(--color-surface); }
+  .book__note { margin-top: var(--s-1); color: var(--color-muted); font-size: var(--fs-sm); }
+  .book__list { margin-top: var(--s-3); border-top: 1px solid var(--color-border); }
+  .book__item {
+    display: grid; grid-template-columns: auto 1fr; column-gap: var(--s-2); align-items: center;
+    min-height: 64px; padding-block: var(--s-1); border-bottom: 1px solid var(--color-border);
+    text-decoration: none; color: var(--color-text);
+    transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  }
+  .book__item :global(svg) { grid-row: span 2; width: 22px; height: 22px; color: var(--color-accent); }
+  .book__label { font-weight: 600; }
+  .book__value { color: var(--color-muted); font-size: var(--fs-sm); }
+  .book__item:hover .book__label { color: var(--color-accent); }
+
+  /* Desktop: next to the trigger (position set by ui.ts). Phone: bottom sheet. */
+  @media (min-width: 768px) {
+    .book { position: fixed; margin: 0; inset: auto; top: var(--book-y, 50%); left: var(--book-x, 50%); }
+    .book::backdrop { background: transparent; }
+    .book { box-shadow: 0 12px 32px var(--color-shade); }
+  }
+  @media (max-width: 767px) {
+    .book {
+      width: 100%; margin: auto 0 0; inset: auto 0 0 0; position: fixed; padding-bottom: calc(var(--s-4) + env(safe-area-inset-bottom));
+      border-width: 1px 0 0;
+    }
+    .book[open] { animation: sheet-in 280ms var(--ease-out); }
+    @keyframes sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+  }
+</style>

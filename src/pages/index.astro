@@ -1,0 +1,49 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import BookDialog from "../components/BookDialog.astro";
+import MobileBar from "../components/MobileBar.astro";
+import Directions from "../components/Directions.astro";
+import OneDay from "../components/OneDay.astro";
+import Doctors from "../components/Doctors.astro";
+import Equipment from "../components/Equipment.astro";
+import Trust from "../components/Trust.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import { clinic, socials } from "../data/clinic";
+
+const title = "Vidnova Clinic у Львові — пластична хірургія, стоматологія";
+const description = "Vidnova Clinic на вул. Куровця, 10 у Львові: пластична хірургія, стоматологія, лазерна й медична косметологія, гінекологія. Запис: +38 096 214 03 33.";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "MedicalClinic",
+      name: clinic.name,
+      telephone: "+380962140333",
+      email: clinic.email,
+      address: { "@type": "PostalAddress", streetAddress: clinic.address, addressLocality: "Львів", addressCountry: "UA" },
+      openingHours: "Mo-Sa 09:00-19:00",
+      medicalSpecialty: ["PlasticSurgery", "Dentistry", "Dermatology", "Gynecologic"],
+      sameAs: socials.map((s) => s.href),
+    },
+    { "@type": "WebSite", name: "Vidnova Clinic у Львові", inLanguage: "uk" },
+    { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Головна" }] },
+  ],
+};
+---
+<Base lang="uk" title={title} description={description} canonical={import.meta.env.PUBLIC_SITE_URL}>
+  <Header slot="header" />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} data-rec="S-R013" />
+  <Hero />
+  <Directions />
+  <OneDay />
+  <Doctors />
+  <Equipment />
+  <Trust />
+  <Contacts />
+  <BookDialog />
+  <MobileBar />
+  <Footer slot="footer" />
+</Base>

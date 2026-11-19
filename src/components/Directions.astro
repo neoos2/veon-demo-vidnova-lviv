@@ -1,0 +1,115 @@
+---
+import Section from "./Section.astro";
+import Photo from "./Photo.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { directions, FUTURE_NOTE, type DirectionKey } from "../data/clinic";
+import plastic from "../assets/photos/dir-plastic.jpg";
+import dental from "../assets/photos/dir-dental.jpg";
+import laser from "../assets/photos/dir-laser.jpg";
+import medcos from "../assets/photos/dir-medcos.jpg";
+import gyn from "../assets/photos/dir-gyn.jpg";
+import doctors from "../assets/photos/dir-doctors.jpg";
+
+const photos: Record<DirectionKey, ImageMetadata> = { plastic, dental, laser, medcos, gyn, doctors };
+---
+<Section id="directions" rec="UX-R004" class="section directions">
+  <div class="container dir-layout">
+    <div class="section-head dir-head">
+      <h2 class="h2">Шість напрямів в одній клініці на Куровця, 10</h2>
+      <p class="lead">Запис на будь-який напрям — телефоном, у Viber або Telegram. Ціни пластичної хірургії — після консультації.</p>
+    </div>
+
+    <ol class="dir-list" data-dir-index>
+      {directions.map((d, i) => (
+        <li class:list={["dir", i === 0 && "dir--lead", i === 0 && "is-active"]} data-dir={d.key}>
+          <h3 class="dir-title">
+            <button class="dir-toggle" type="button" aria-expanded="true" aria-controls={`dir-panel-${d.key}`} data-dir-toggle>
+              <span class="dir-name">{d.title}</span>
+              <Icon name="plus" class="dir-icon" />
+            </button>
+          </h3>
+          <div class="dir-panel" id={`dir-panel-${d.key}`}>
+            <ul class="dir-groups">
+              {d.groups.map((g, gi) => <li>{gi === 0 ? g : g.charAt(0).toLocaleLowerCase("uk") + g.slice(1)}</li>)}
+            </ul>
+            <Photo src={photos[d.key]} alt={d.alt} sizes="(max-width: 767px) 100vw, 60vw" widths={[400, 700, 1000]} class="dir-photo" pictureClass="dir-photo-wrap" />
+            <div class="dir-actions">
+              <a class="btn btn--secondary dir-book" href="#contacts" data-book aria-haspopup="dialog">Записатися</a>
+              <FutureLink note={FUTURE_NOTE}>Усі послуги напряму</FutureLink>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="dir-frame" aria-hidden="true">
+      {directions.map((d, i) => (
+        <div class:list={["dir-frame__item", i === 0 && "is-active"]} data-dir-frame={d.key}>
+          <Photo src={photos[d.key]} alt="" sizes="(min-width: 1440px) 520px, 38vw" widths={[500, 800, 1100]} />
+        </div>
+      ))}
+    </div>
+  </div>
+</Section>
+
+<style>
+  .dir-layout { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .dir-list { border-top: 1px solid var(--color-text); }
+  .dir { border-bottom: 1px solid var(--color-border); }
+  .dir-title { font-size: var(--fs-h3); }
+  .dir--lead .dir-title { font-size: var(--fs-h2); }
+  .dir-toggle {
+    display: flex; width: 100%; align-items: center; justify-content: space-between; gap: var(--s-2);
+    min-height: var(--tap); padding: var(--s-3) 0; border: 0; background: none; color: inherit;
+    font: inherit; line-height: var(--lh-display); text-align: left; cursor: pointer;
+  }
+  .dir-name { position: relative; }
+  .dir-name::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -0.12em; height: 2px; background: var(--color-accent);
+    transform: scaleX(0); transform-origin: left; transition: transform 240ms var(--ease-out);
+  }
+  .dir-toggle:hover .dir-name { color: var(--color-accent); }
+  .dir-toggle :global(.dir-icon) { flex: none; width: 28px; height: 28px; color: var(--color-accent); transition: transform 240ms var(--ease-out); }
+  .dir.is-open .dir-toggle :global(.dir-icon) { transform: rotate(45deg); }
+  :global(html:not(.js)) .dir-toggle :global(.dir-icon) { display: none; }
+  .dir-panel { display: grid; gap: var(--s-3); padding-bottom: var(--s-4); }
+  .dir-groups { font-size: var(--fs-md); color: var(--color-muted); }
+  .dir-groups li { display: inline; }
+  .dir-groups li:not(:last-child)::after { content: ", "; }
+  .dir-panel :global(.dir-photo-wrap) { overflow: hidden; }
+  .dir-panel :global(.dir-photo) { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; }
+  .dir-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-4); }
+  .dir-frame { display: none; }
+
+  /* Phone/tablet accordion (only once JS runs; without JS every direction stays open). */
+  @media (max-width: 1023px) {
+    :global(.js) .dir:not(.is-open) .dir-panel { display: none; }
+    :global(.js) .dir.is-open .dir-panel { animation: dir-in 240ms var(--ease-out); }
+    @keyframes dir-in { from { opacity: 0; } to { opacity: 1; } }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .dir-panel :global(.dir-photo) { aspect-ratio: 16 / 10; }
+  }
+
+  /* Desktop index: rows left (7 cols), sticky frame right (5 cols) that follows the hovered/focused row. */
+  @media (min-width: 1024px) {
+    .dir-layout { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+    .dir-head { grid-column: 1 / 9; }
+    .dir-list { grid-column: 1 / 8; }
+    .dir-frame { display: block; grid-column: 9 / 13; position: sticky; top: calc(var(--header-h) + var(--s-3)); align-self: start; aspect-ratio: 4 / 5; overflow: hidden; }
+    .dir-frame__item { position: absolute; inset: 0; opacity: 0; transition: opacity 240ms var(--ease-out); }
+    .dir-frame__item.is-active { opacity: 1; }
+    .dir-frame__item :global(img) { width: 100%; height: 100%; object-fit: cover; }
+    .dir-toggle { cursor: default; padding-block: var(--s-3) var(--s-2); }
+    .dir-toggle :global(.dir-icon) { display: none; }
+    .dir-panel { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--s-2) var(--s-4); padding-bottom: var(--s-3); }
+    .dir-panel :global(.dir-photo-wrap) { display: none; }
+    .dir.is-active .dir-name::after { transform: scaleX(1); }
+    .dir.is-active .dir-name { color: var(--color-accent); }
+    .dir-book { min-height: 44px; }
+  }
+  @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+    .dir-frame__item, .dir-name::after { transition: none; }
+  }
+</style>

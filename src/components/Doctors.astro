@@ -1,0 +1,50 @@
+---
+import Section from "./Section.astro";
+import Photo from "./Photo.astro";
+import FutureLink from "./FutureLink.astro";
+import { FUTURE_NOTE } from "../data/clinic";
+import photo from "../assets/photos/doctors.jpg";
+---
+<Section id="doctors" rec="UX-R005,MA-R007" class="section doctors on-dark">
+  <div class="container doc-grid">
+    <figure class="doc-photo">
+      <Photo src={photo} alt="Пластичні хірурги Vidnova Світлана Работенко та Іван Кононихін" sizes="(min-width: 1440px) 630px, (min-width: 1024px) 46vw, 100vw" widths={[480, 800, 1200]} />
+    </figure>
+    <div class="doc-text">
+      <h2 class="h2">Хірурги Vidnova у ТОП-50 пластичних хірургів України</h2>
+      <ul class="doc-list">
+        <li>
+          <h3 class="doc-name">Світлана Работенко</h3>
+          <p class="doc-role">Головний лікар, пластичний хірург</p>
+        </li>
+        <li>
+          <h3 class="doc-name">Іван Кононихін</h3>
+          <p class="doc-role">Пластичний хірург</p>
+        </li>
+      </ul>
+      <div class="doc-actions">
+        <a class="btn btn--ghost-light" href="#contacts" data-book aria-haspopup="dialog">Записатися на консультацію</a>
+        <FutureLink note={FUTURE_NOTE}>Усі лікарі</FutureLink>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .doctors { background: var(--color-dark); color: var(--color-on-dark); }
+  .doc-grid { display: grid; gap: var(--s-6); }
+  .doc-photo { overflow: hidden; }
+  .doc-photo :global(img) { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+  .doc-text { display: grid; gap: var(--s-3); align-content: start; }
+  .doc-list { margin-top: var(--s-3); border-top: 1px solid var(--color-muted); }
+  .doc-list li { display: grid; gap: var(--s-1); padding-block: var(--s-3); border-bottom: 1px solid var(--color-muted); }
+  .doc-name { font-size: var(--fs-h3); }
+  .doc-role { color: var(--color-on-dark-muted); font-size: var(--fs-md); }
+  .doc-actions .btn { white-space: nowrap; padding-inline: var(--s-2); }
+  .doc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-4); margin-top: var(--s-2); }
+  @media (min-width: 1024px) {
+    .doc-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: center; }
+    .doc-photo { grid-column: 1 / 7; }
+    .doc-text { grid-column: 8 / 13; }
+  }
+</style>

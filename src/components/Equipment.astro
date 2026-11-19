@@ -1,0 +1,53 @@
+---
+import Section from "./Section.astro";
+import Photo from "./Photo.astro";
+import { equipment } from "../data/clinic";
+import microscope from "../assets/photos/eq-microscope.png";
+import fotona from "../assets/photos/eq-fotona.jpg";
+const figs: Record<string, { src: ImageMetadata; alt: string; caption: string } | undefined> = {
+  "Стоматологія": { src: microscope, alt: "Мікроскоп Carl Zeiss Extaro 300", caption: "Мікроскоп Carl Zeiss Extaro 300" },
+  "Лазер і косметологія": { src: fotona, alt: "Лазерна платформа Fotona SP Dynamis", caption: "Fotona SP Dynamis" },
+};
+---
+<Section id="equipment" class="section equipment">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="h2">Обладнання: Carl Zeiss, Fotona, Lumenis, 3Shape</h2>
+      <p class="lead">Апарати, з якими працюють лікарі клініки, — за призначенням.</p>
+    </div>
+    <div class="eq-list">
+      {equipment.map((g) => {
+        const f = figs[g.group];
+        return (
+          <div class:list={["eq-row", f && "eq-row--fig"]}>
+            <h3 class="eq-group">{g.group}</h3>
+            <p class="eq-items">{g.items.join(", ")}</p>
+            {f && (
+              <figure class="eq-fig">
+                <Photo src={f.src} alt={f.alt} sizes="(min-width: 1024px) 220px, 40vw" widths={[240, 440]} />
+                <figcaption>{f.caption}</figcaption>
+              </figure>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</Section>
+
+<style>
+  .equipment { padding-bottom: var(--s-12); }
+  .eq-list { border-top: 1px solid var(--color-text); }
+  .eq-row { display: grid; gap: var(--s-2); padding-block: var(--s-4); border-bottom: 1px solid var(--color-border); }
+  .eq-group { font-family: var(--font-body); font-size: var(--fs-body); font-weight: 600; color: var(--color-muted); }
+  .eq-items { font-family: var(--font-display); font-size: var(--fs-h3); line-height: 1.15; }
+  .eq-fig { display: grid; gap: var(--s-1); width: min(100%, 200px); }
+  .eq-fig :global(img) { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: contain; background: var(--color-bg); }
+  .eq-fig figcaption { font-size: var(--fs-sm); color: var(--color-muted); }
+  @media (min-width: 1024px) {
+    .eq-row { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
+    .eq-group { grid-column: 1 / 4; padding-top: 0.6em; }
+    .eq-items { grid-column: 4 / 10; }
+    .eq-fig { grid-column: 10 / 13; justify-self: end; width: 200px; }
+  }
+</style>
